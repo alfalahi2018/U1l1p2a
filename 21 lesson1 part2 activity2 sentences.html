@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Unit 2 · Lesson 1, part 2 · Activity 2</title>
+<style>
+:root{--o:#e0734f;--bl:#4a5d8a;--bg:#fff6ef;--ink:#2b2b2b;--card:#fff;--ok:#16a34a;--no:#dc2626}
+@media(prefers-color-scheme:dark){:root{--bg:#1e1a19;--ink:#f3ede8;--card:#2b2524}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Comic Sans MS",system-ui,sans-serif;line-height:1.7}
+.w{max-width:760px;margin:0 auto;padding:14px}
+.hd{background:var(--bl);color:#fff;border-radius:16px;padding:14px 16px}.hd small{opacity:.85}.hd h1{margin:2px 0 0;color:#ffd9c9;font-size:1.7rem}
+h2{color:var(--o);margin:16px 0 4px}.nm{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.nm label{flex:1;min-width:140px;font-weight:bold}
+.nm input{width:100%;padding:8px;border:2px solid #e3c8bb;border-radius:10px;font-size:1rem;background:var(--card);color:var(--ink)}
+#bank{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:var(--bg);padding:8px 0;border-bottom:2px dashed var(--o)}
+.chip{background:var(--card);border:2px solid var(--o);border-radius:999px;padding:5px 14px;font-weight:bold;cursor:grab;user-select:none}.chip.sel{background:var(--o);color:#fff}.chip.used{opacity:.35}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid #ecd8cd;border-radius:14px;padding:10px 12px;margin:10px 0}.row.ok{border-color:var(--ok)}.row.no{border-color:var(--no)}
+.pic{font-size:2.4rem;position:relative}.pic b{position:absolute;left:-8px;top:-6px;background:var(--o);color:#fff;border-radius:50%;width:22px;height:22px;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.gap{display:inline-block;min-width:120px;border-bottom:3px solid var(--ink);text-align:center;font-weight:bold;color:var(--bl);cursor:pointer;padding:0 6px;margin:0 4px}.gap.over{background:#ffd54a55}.ex{border-bottom:3px solid var(--ok);color:var(--ok)}
+.fb{display:block;font-size:.85rem;font-weight:bold}.ok .fb{color:var(--ok)}.no .fb{color:var(--no)}
+button{background:var(--o);color:#fff;border:0;border-radius:999px;padding:11px 22px;font-size:1.05rem;font-weight:bold;cursor:pointer;margin:8px 6px 0 0}
+#res{text-align:center;font-weight:bold;font-size:1.2rem;min-height:1.8em;margin-top:8px}
+footer{text-align:center;margin:22px 0 8px}footer span{background:#fcd3c0;color:#2b1a00;padding:6px 16px;border-radius:12px;font-weight:bold}
+</style></head><body><div class="w">
+<div class="hd"><small>Lesson 1, part 2 · Vocabulary</small><h1>2 · Awesome animals</h1></div>
+<div class="nm"><label>Name <input id="nm"></label><label>Grade <input id="gr"></label></div>
+<h2>2 Read and complete the sentences with words from Activity 1.</h2>
+<p>Drag a word into the gap, or tap a word and then tap the gap. Tap a filled gap to remove the word.</p>
+<div id="bank"></div><div id="list"></div>
+<button id="chk">✅ Check answers</button><button id="rs">🔄 Try again</button><div id="res"></div>
+<footer><span>Created by T.Badria Alfalahi</span></footer></div>
+<script>
+const D={"bank": ["antennae", "beak", "claws", "fins", "flippers", "paws", "horn", "scales", "spines", "tongue", "hump", "whiskers"], "items": [["🐜", "Ants have", "antennae", "that they use to communicate.", 1], ["🦏", "A rhino has a big", "horn", ".", 0], ["🦭", "Seals use their", "flippers", "to move around.", 0], ["🦎", "A chameleon catches insects with its", "tongue", ".", 0], ["✴️", "Sea urchins have long", "spines", "for protection.", 0], ["🐍", "A snake has", "scales", "all over its body.", 0]]},$=s=>document.querySelector(s);let sel=null;
+const fill={};
+D.bank.forEach(w=>{const c=document.createElement('span');c.className='chip';c.textContent=w;c.draggable=true;c.id='c_'+w;
+c.ondragstart=e=>{e.dataTransfer.setData('text',w)};c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));if(sel===w){sel=null}else{sel=w;c.classList.add('sel')}};$('#bank').appendChild(c)});
+function put(i,w){const old=fill[i];if(old)$('#c_'+old).classList.remove('used');
+if(w){for(const k in fill)if(fill[k]===w){fill[k]=null;$('#g'+k).textContent=''}fill[i]=w;$('#g'+i).textContent=w;$('#c_'+w).classList.add('used')}else{fill[i]=null;$('#g'+i).textContent=''}}
+D.items.forEach((it,i)=>{const d=document.createElement('div');d.className='row';
+const g=it[4]?`<span class="gap ex">${it[2]}</span>`:`<span class="gap" id="g${i}"></span>`;
+d.innerHTML=`<span class="pic"><b>${i+1}</b>${it[0]}</span><div>${it[1]} ${g} ${it[3]}<span class="fb"></span></div>`;$('#list').appendChild(d);
+if(!it[4]){const gp=d.querySelector('.gap');gp.ondragover=e=>{e.preventDefault();gp.classList.add('over')};gp.ondragleave=()=>gp.classList.remove('over');
+gp.ondrop=e=>{e.preventDefault();gp.classList.remove('over');put(i,e.dataTransfer.getData('text'))};
+gp.onclick=()=>{if(sel){put(i,sel);sel=null;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'))}else if(fill[i])put(i,null)}}});
+$('#chk').onclick=()=>{let sc=0;D.items.forEach((it,i)=>{if(it[4])return;const ok=fill[i]===it[2],r=$('#list').children[i];r.className='row '+(ok?'ok':'no');r.querySelector('.fb').textContent=ok?'✅ Great job!':'❌ Correct answer: '+it[2];sc+=ok});
+const n=$('#nm').value.trim();$('#res').textContent=`${n?n+', y':'Y'}our score: ${sc} / 5 ${sc==5?'🏆 Excellent!':sc>=4?'🌟 Very good!':sc>=3?'👍 Good try!':'💪 Try again!'}`};
+$('#rs').onclick=()=>location.reload();
+</script></body></html>
